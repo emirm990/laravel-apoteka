@@ -30,16 +30,11 @@ class ItemsController extends Controller
             $items = new \Illuminate\Pagination\LengthAwarePaginator($rawItems, $total, $perPage, $currentPage);
             return view('welcome', ['items' => $items, 'user' => $request->user(), 'searchVal' => $request['search']]);
         }else{
-            $items = Items::paginate(21);
+            $items = Items::OrderBy('updated_at', 'desc')->paginate(21);
             return view('welcome', ['items' => $items, 'user' => $request->user(), 'searchVal' => '']);
             //dd($items);
         }
         
-    }
-    public function search(Request $request){
-        $results = DB::connection('apoteka')
-            ->select("SELECT from items WHERE name LIKE ?", array('%'.$request['search'].'%'));
-        dd($results);
     }
     /**
      * Show the form for creating a new resource.
@@ -48,7 +43,7 @@ class ItemsController extends Controller
      */
     public function create()
     {
-        //
+        return view('items.new');
     }
 
     /**
@@ -59,7 +54,19 @@ class ItemsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', 'max:255'],
+            'price' => ['required', 'numeric'],
+            'stock' => ['required', 'numeric']
+            ]);
+        $item = new Items;
+        $item['name'] = $request['name'];
+        $item['description'] = $request['description'];
+        $item['price'] = $request['price'];
+        $item['stock'] = $request['stock'];
+        $item->save();
+        return redirect("/");
     }
 
     /**
