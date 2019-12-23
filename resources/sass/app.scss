@@ -6,3 +6,11 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+.card-height{
+    height: 200px;
+    object-fit: cover;
+  }
+.card-text{
+    height: 80px;
+}
