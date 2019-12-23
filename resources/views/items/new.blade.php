@@ -1,8 +1,12 @@
 @extends('layouts.app')
 @section('content')
-<div>
-    <form action="/items/new" method="POST">
-    @csrf
+<div class="container">
+    <form action="/items/new" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="form-group">
+            <label for="image">Image</label>
+            <input type="file" class="form-control" id="image" name="image">
+        </div>
         <div class="form-group">
             <label for="name">Name</label>
             <input type="text" class="form-control" id="name" name="name">
