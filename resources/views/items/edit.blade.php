@@ -1,9 +1,21 @@
 @extends('layouts.app')
 @section('content')
-<div>
+<div class="container">
     <form action="/items/{{$item->id}}/edit" method="POST">
-    @csrf
-    @method('patch')
+        @csrf
+        @method('patch')
+        @if(Session::has('success'))
+        <div class="alert alert-success">
+            {!! Session::get('success') !!}
+        </div>
+        @endif
+        <div class="form-group">
+            <img src="{{asset( $item -> image)}}" alt="Item image">
+        </div>
+        <div class="form-group">
+            <label for="image">Image</label>
+            <input type="file" class="form-control" id="image" name="image">
+        </div>
         <div class="form-group">
             <label for="name">Name</label>
             <input type="text" class="form-control" id="name" name="name" value="{{ $item->name}}">
