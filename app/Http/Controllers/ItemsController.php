@@ -58,18 +58,19 @@ class ItemsController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:255'],
-            'image' => ['file'],
+            'image' => ['file', 'mimes:jpeg,jpg,png,gif', 'max:10000'],
             'price' => ['required', 'numeric'],
             'stock' => ['required', 'numeric']
         ]);
         $item = new Items;
+        $productImage = str_replace('/storage', '', $item['image']);
+        Storage::delete('/public' . $productImage);
         $item['image'] = $request->file('image')->store('public/images');
         $item['name'] = $request['name'];
         $item['description'] = $request['description'];
         $item['image'] = Storage::url($item['image']);
         $item['price'] = $request['price'];
         $item['stock'] = $request['stock'];
-
         //dd($item);
         $item->save();
         return redirect("/dashboard/edit");
@@ -122,13 +123,18 @@ class ItemsController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:255'],
+            'image' => ['file', 'mimes:jpeg,jpg,png,gif', 'max:10000'],
             'price' => ['required', 'numeric'],
             'stock' => ['required', 'numeric']
         ]);
         // to-do image change like in new item...
         $data = $items::find($item_id);
+        $productImage = str_replace('/storage', '', $data['image']);
+        Storage::delete('/public' . $productImage);
+        $data['image'] = $request->file('image')->store('public/images');
         $data['name'] = $request['name'];
         $data['description'] = $request['description'];
+        $data['image'] = Storage::url($data['image']);
         $data['price'] = $request['price'];
         $data['stock'] = $request['stock'];
 
