@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Items;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ItemsController extends Controller
 {
@@ -21,20 +22,19 @@ class ItemsController extends Controller
             }
         });*/
         //dd($request['search']);
-        if($request['search']){
-            $rawItems =DB::select("SELECT * from items WHERE name LIKE ?", array('%'.$request['search'].'%'));
+        if ($request['search']) {
+            $rawItems = DB::select("SELECT * from items WHERE name LIKE ?", array('%' . $request['search'] . '%'));
             //dd($items);
             $total = count($rawItems);
             $perPage = 21;
             $currentPage = 1;
             $items = new \Illuminate\Pagination\LengthAwarePaginator($rawItems, $total, $perPage, $currentPage);
             return view('welcome', ['items' => $items, 'user' => $request->user(), 'searchVal' => $request['search']]);
-        }else{
+        } else {
             $items = Items::OrderBy('updated_at', 'desc')->paginate(21);
             return view('welcome', ['items' => $items, 'user' => $request->user(), 'searchVal' => '']);
             //dd($items);
         }
-        
     }
     /**
      * Show the form for creating a new resource.
@@ -54,19 +54,25 @@ class ItemsController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:255'],
+            'image' => ['file'],
             'price' => ['required', 'numeric'],
             'stock' => ['required', 'numeric']
-            ]);
+        ]);
         $item = new Items;
+        $item['image'] = $request->file('image')->store('public/images');
         $item['name'] = $request['name'];
         $item['description'] = $request['description'];
+        $item['image'] = Storage::url($item['image']);
         $item['price'] = $request['price'];
         $item['stock'] = $request['stock'];
+
+        //dd($item);
         $item->save();
-        return redirect("/");
+        return redirect("/dashboard/edit");
     }
 
     /**
@@ -90,6 +96,7 @@ class ItemsController extends Controller
     {
         //dd($items::find($item_id));
         $item = $items::find($item_id);
+        //dd($item);
         return view('items.edit', ['item' => $item]);
     }
 
@@ -102,7 +109,7 @@ class ItemsController extends Controller
      */
     public function update(Request $request, Items $items, $item_id)
     {
-        
+
         /*function validator(array $request)
             {
             return Validator::make($data, [
@@ -113,20 +120,21 @@ class ItemsController extends Controller
             ]);
             }*/
         $request->validate([
-                'name' => ['required', 'string', 'max:255'],
-                'description' => ['required', 'string', 'max:255'],
-                'price' => ['required', 'numeric'],
-                'stock' => ['required', 'numeric']
+            'name' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string', 'max:255'],
+            'price' => ['required', 'numeric'],
+            'stock' => ['required', 'numeric']
         ]);
+        // to-do image change like in new item...
         $data = $items::find($item_id);
-        $data['name']=$request['name'];
-        $data['description']=$request['description'];
-        $data['price']=$request['price'];
-        $data['stock']=$request['stock'];
-       
+        $data['name'] = $request['name'];
+        $data['description'] = $request['description'];
+        $data['price'] = $request['price'];
+        $data['stock'] = $request['stock'];
+
         //dd($data);
         $data->save();
-        return redirect('/items/' .$item_id . '/edit/');
+        return redirect()->back()->with('success', 'Item saved!');
     }
 
     /**
