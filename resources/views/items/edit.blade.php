@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <div class="container">
-    <form action="/items/{{$item->id}}/edit" method="POST">
+    <form action="/items/{{$item->id}}/edit" method="POST" enctype="multipart/form-data">
         @csrf
         @method('patch')
         @if(Session::has('success'))
@@ -13,7 +13,6 @@
             <img src="{{asset( $item -> image)}}" alt="Item image">
         </div>
         <div class="form-group">
-            <label for="image">Image</label>
             <input type="file" class="form-control" id="image" name="image">
         </div>
         <div class="form-group">
