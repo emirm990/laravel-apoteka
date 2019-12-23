@@ -12,13 +12,13 @@
 <div class="container">
     <div class="row">
         @foreach($items as $item)
-        <div class="card col-3 mt-2">
+        <div class="card col-4 mt-2">
+        <img class="card-img-top card-height pt-2" src="{{asset( $item -> image)}}" alt="Item image">
             <div class="card-body">
-                <img class="card-img-top" src={{asset( $item -> image)}} alt="Item image">
                 <h3 class="card-title">{{ $item -> name}}</h3>
                 <p class="card-text">{{ $item -> description}}</p>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Price: {{ $item -> price}}</li>
+                    <li class="list-group-item">Price: {{ $item -> price}} KM</li>
                     <li class="list-group-item">Stock: {{ $item->stock}}</li>
                     <li class="list-group-item">
                         <form class="form-inline" action="/dashboard/{{$item->id}}/delete" method="POST">
@@ -37,7 +37,6 @@
         <div class="pagination">
             {{ $items->links()}}
         </div>
-
     </div>
 </div>
 @endsection
