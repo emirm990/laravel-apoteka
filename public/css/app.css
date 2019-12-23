@@ -5512,9 +5512,6 @@ input[type=button].btn-block {
   padding-left: 0;
   list-style: none;
   border-radius: 0.25rem;
-  justify-content: center;
-  margin-top: 25px;
-  margin-bottom: 25px;
 }
 
 .page-link {
@@ -11357,5 +11354,15 @@ a.text-dark:focus {
     color: inherit;
     border-color: #dee2e6;
   }
+}
+
+.card-height {
+  height: 200px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.card-text {
+  height: 80px;
 }
 
