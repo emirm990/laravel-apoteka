@@ -1,12 +1,6 @@
 <?php
 
 use Illuminate\Support\Str;
-$url = parse_url("mysql://b896201ecf9e7b:0d797b64@us-cdbr-iron-east-05.cleardb.net/heroku_96f818b6f1e8187?reconnect=true");
-
-$server = $url["host"];
-$username = $url["user"];
-$password = $url["pass"];
-$db = substr($url["path"], 1);
 
 return [
     /*
@@ -43,19 +37,19 @@ return [
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DATABASE_URL'),
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
+            'database' => env('DB_DATABASE/..', database_path('apoteka.sqlite')),
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
         'mysql' => [
             'driver' => 'mysql',
-            'url' => $url,
+            'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
-            'database' => $db,
-            'username' => $username,
-            'password' => $password,
+            'database' => env('DB_DATABASE', 'forge'),
+            'username' => env('DB_USERNAME', 'forge'),
+            'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
