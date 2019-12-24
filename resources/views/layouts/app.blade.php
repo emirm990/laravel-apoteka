@@ -70,6 +70,9 @@
                                     Dashboard
                                 </a>
                                 @endif
+                                <a class="dropdown-item" href="{{ route('cart') }}">
+                                    Cart
+                                </a>
                             </div>
                         </li>
                         @endguest
