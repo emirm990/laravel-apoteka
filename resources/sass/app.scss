@@ -7,10 +7,74 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-.card-height{
-    height: 200px;
-    object-fit: cover;
-  }
-.card-text{
-    height: 80px;
+.card-height {
+	height: 200px;
+	object-fit: cover;
+}
+.card-text {
+	height: 80px;
+}
+.cart-all {
+	justify-content: space-between;
+}
+.cart-heading {
+	display: block;
+	width: 100%;
+	text-align: center;
+}
+.cart-container {
+	width: 70%;
+	.cart-item {
+		display: flex;
+		margin-bottom: 1em;
+		border: 1px solid #ddd;
+		border-radius: 3px;
+		padding: 1em;
+		img {
+			width: 250px;
+			object-fit: contain;
+		}
+		.cart-item-description {
+			display: flex;
+			flex-direction: column;
+			margin-right: 2em;
+			padding-right: 1em;
+			border-right: 1px solid #ddd;
+			flex-basis: 50%;
+		}
+		.cart-item-price {
+			display: flex;
+			flex-direction: column;
+			.cart-item-price-container {
+				display: flex;
+				div {
+					display: flex;
+					margin-right: 1em;
+				}
+				.count {
+					margin-right: 0.5em;
+					&::after {
+						content: "*";
+						margin-left: 0.5em;
+						display: inline-block;
+					}
+				}
+			}
+		}
+	}
+}
+.cart-total {
+	width: 28%;
+	margin-bottom: 1em;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	padding: 1em;
+	ul {
+		list-style-type: none;
+		padding-left: 0;
+		li {
+			margin-bottom: 0.5em;
+		}
+	}
 }
