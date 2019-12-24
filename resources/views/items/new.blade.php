@@ -4,7 +4,8 @@
     <form action="/items/new" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
-            <input type="file" class="form-control" id="image" name="image">
+            <label for="image">Product image</label>
+            <input type="file" class="form-control-file" id="image" name="image">
         </div>
         <div class="form-group">
             <label for="name">Name</label>
