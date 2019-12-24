@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Str;
-$url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+$url = parse_url("mysql://b896201ecf9e7b:0d797b64@us-cdbr-iron-east-05.cleardb.net/heroku_96f818b6f1e8187?reconnect=true");
 
 $server = $url["host"];
 $username = $url["user"];
