@@ -20,7 +20,13 @@
                     <li class="list-group-item">Price: {{ $item -> price}} KM</li>
                     <li class="list-group-item">Stock: {{ $item->stock}}</li>
                     @auth
-                    <button onClick="addToCart('{{$item->id}}','{{auth()->id()}}')" class="btn btn-primary">Add to cart</button>
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <input type="number" name="number_of_items" min="1" value="1" class="form-control">
+                            <button onClick="addToCart('{{$item->id}}','{{auth()->id()}}')" class="btn btn-primary">Add to cart</button>
+                        </div>
+                    </form>
+                    
                     @endauth
                 </ul>
             </div>
@@ -43,14 +49,19 @@
 
     @endsection
     <script>
-        function addToCart(item_id, user_id) {
-            console.log(item_id, user_id);
+        function addToCart(item_id, user_id, number_of_items) {
+            number_of_items = event.target.previousElementSibling.value;
+            event.preventDefault();
+            console.log(item_id, user_id, number_of_items);
             axios.post('/cart/add', {
                     item_id,
-                    user_id
+                    user_id,
+                    number_of_items
                 })
                 .then(res => {
-                    console.log(res);
+                    console.log(items_in_cart);
+                    
+                    items_in_cart.innerText = res.data.total;
                 }).catch(err => {
                     console.log(err)
                 })
