@@ -21,6 +21,16 @@
                         <p>Total: {{$item->total}} KM</p>
                     </div>
                 </div>
+                <div>
+                    <form action="/cart/destroy" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <input class="form-control" type="number" name="number_of_items" value="1" min="1" >
+                        <input type="hidden" name="item_id" value="{{$item->id}}">
+                        <input type="submit" value="Remove" class="btn btn-danger">
+                    </div>
+                    </form>
+                </div>
             </div>
             @endforeach
 
@@ -48,3 +58,23 @@
 </div>
 
 @endsection
+
+<script>
+    
+    function removeFromCart(item_id, user_id, number_of_items) {
+            number_of_items = event.target.previousElementSibling.value;
+            event.preventDefault();
+            console.log(item_id, user_id, number_of_items);
+            axios.post('/cart/destroy', {
+                    item_id,
+                    user_id,
+                    number_of_items
+                })
+                .then(res => {
+                    items_in_cart.innerText = res.data.total;
+                }).catch(err => {
+                    console.log(err)
+                })
+        }
+
+</script>
