@@ -28,6 +28,14 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
+                <div>
+                    <a href="{{ route('cart') }}">
+                        <div>
+                            <p>Cart</p>
+                            <span id="items_in_cart">0</span>
+                        </div>
+                    </a>
+                </div>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -85,6 +93,18 @@
             @yield('content')
         </main>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded',function(){
+            items_in_cart = document.getElementById("items_in_cart");
+            axios.get('/cart/count')
+                .then(function(response){
+                    items_in_cart.innerText = response.data;
+                })
+                .catch(function(error){
+                    console.log(error);
+                })
+        })
+    </script>
 </body>
 
 </html>
