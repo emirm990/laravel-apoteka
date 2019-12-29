@@ -6,6 +6,8 @@ use App\Cart;
 use App\Items;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
@@ -25,30 +27,47 @@ class CartController extends Controller
         
         return view('cart.index', ['cartItems' => $cartItems, 'cartPrice' => $cartPrice]);
     }
+    public function itemsInCart(){
+        $total = 0;
+        $totalInCart = Cart::pluck('count');
+        foreach($totalInCart as $itemCount){
+            $total += $itemCount;
+        };
+        return $total;
+    }
 
     public function addToCart(User $user, Items $item, Request $request)
     {
         $user = $user::find($request->user_id);
         $item = $item::find($request->item_id);
+        $number_of_items = $request->number_of_items;
         $itemInCart = Cart::where([
             ['user_id', $user->id],
             ['item_id', $item->id]
         ])->first();
         if ($itemInCart) {
-            $itemInCart->count += 1;
+            $itemInCart->count += $number_of_items;
             $itemInCart->total = $itemInCart->count * $item->price;
             $itemInCart->save();
-            return $itemInCart;
+            $total = $this->itemsInCart();
+            return response()->json(
+                ['item' => $itemInCart,
+                'total' => $total]
+            );
         }
         $cartItem = new Cart;
         $cartItem['user_id'] = $user->id;
         $cartItem['item_id'] = $item->id;
-        $cartItem['count'] = 1;
+        $cartItem['count'] = $number_of_items;
         $cartItem['total'] = $cartItem->count * $item->price;
         $cartItem['processed'] = false;
         $cartItem->save();
-
-        return $cartItem;
+        $total = $this->itemsInCart();
+        return response()->json(
+            ['item' => $cartItem,
+            'total' => $total]
+        );
+        //return $cartItem;
     }
     /**
      * Show the form for creating a new resource.
@@ -111,8 +130,33 @@ class CartController extends Controller
      * @param  \App\Cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Cart $cart)
+    public function destroy(Cart $cart, User $user, Items $item, Request $request)
     {
-        //
+        $user = Auth::id();
+        $item = $item::find($request->item_id);
+        $number_of_items = $request->number_of_items;
+        $itemInCart = Cart::where([
+            ['user_id', $user],
+            ['item_id', $item->id]
+        ])->first();
+        if ($itemInCart) {
+            $itemInCart->count -= $number_of_items;
+            $itemInCart->total = $itemInCart->count * $item->price;
+            if($itemInCart->count <= 0){
+                $itemInCart->delete();
+            }else{
+                $itemInCart->save();
+            } 
+            return redirect()->route('cart');
+        }
+        /*$cartItem = new Cart;
+        $cartItem['user_id'] = $user->id;
+        $cartItem['item_id'] = $item->id;
+        $cartItem['count'] = $number_of_items;
+        $cartItem['total'] = $cartItem->count * $item->price;
+        $cartItem['processed'] = false;*
+        $cartItem->save();
+
+        return $cartItem;*/
     }
 }
