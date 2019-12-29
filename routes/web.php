@@ -22,6 +22,8 @@ Route::get('/dashboard/edit', 'AdminController@index')->middleware('isAdmin');
 Route::get('/dashboard', 'AdminController@home')->name('dashboard')->middleware('isAdmin');
 Route::post('/dashboard/{item_id}/delete', 'AdminController@destroy')->middleware('isAdmin');
 Route::post('/cart/add', 'CartController@addToCart');
+Route::post('/cart/destroy', 'CartController@destroy');
+Route::get('cart/count', 'CartController@itemsInCart');
 Route::get('/cart', 'CartController@index')->name('cart');
 Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
