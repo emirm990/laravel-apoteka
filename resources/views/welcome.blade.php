@@ -20,10 +20,10 @@
                     <li class="list-group-item">Price: {{ $item -> price}} KM</li>
                     <li class="list-group-item">Stock: {{ $item->stock}}</li>
                     @auth
-                    <form class="form-inline">
-                        <div class="form-group">
-                            <input type="number" name="number_of_items" min="1" value="1" class="form-control">
-                            <button onClick="addToCart('{{$item->id}}','{{auth()->id()}}')" class="btn btn-primary">Add to cart</button>
+                    <form class="form-inline mt-2">
+                        <div>
+                            <input type="number" name="number_of_items" min="1" value="1" class="form-control form-control-custom">
+                            <button onClick="addToCart('{{$item->id}}','{{auth()->id()}}')" class="btn btn-primary"><i class="fa fa-cart-plus"></i></button>
                         </div>
                     </form>
                     
