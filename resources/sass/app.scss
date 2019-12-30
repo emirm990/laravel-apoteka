@@ -42,9 +42,13 @@
 			border-right: 1px solid #ddd;
 			flex-basis: 50%;
 		}
+		.cart-item-controlls{
+			flex-basis:20%;
+		}
 		.cart-item-price {
 			display: flex;
 			flex-direction: column;
+			flex-basis: 30%;
 			.cart-item-price-container {
 				display: flex;
 				div {
@@ -77,4 +81,7 @@
 			margin-bottom: 0.5em;
 		}
 	}
+}
+.form-control-custom{
+	width: 100px;
 }
