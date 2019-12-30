@@ -15,18 +15,20 @@
                     <h4>Price:</h4>
                     <div class="cart-item-price-container">
                         <div>
-                            <p class="count">{{$item->count}}</p>
+                            <p class="count" id="{{$item->id}}">{{$item->count}}</p>
+                            <input type="hidden" value="{{$item->count}}" id="item-count-{{$item->id}}">
                             <p> {{$item->price}} KM</p>
                         </div>
                         <p>Total: {{$item->total}} KM</p>
                     </div>
                 </div>
-                <div>
+                <div class="cart-item-controlls">
                     <form action="/cart/destroy" method="POST">
                     @csrf
                     <div class="form-group">
                         <input class="form-control" type="number" name="number_of_items" value="1" min="1" >
-                        <input type="hidden" name="item_id" value="{{$item->id}}">
+                        <input type="hidden" name="item_id" value="{{$item->id}}" id="{{$item->id}}">
+                        <button onClick="addToCart('{{$item->id}}','{{auth()->id()}}')" class="btn btn-primary">Add</button>
                         <input type="submit" value="Remove" class="btn btn-danger">
                     </div>
                     </form>
@@ -60,21 +62,20 @@
 @endsection
 
 <script>
-    
-    function removeFromCart(item_id, user_id, number_of_items) {
-            number_of_items = event.target.previousElementSibling.value;
-            event.preventDefault();
-            console.log(item_id, user_id, number_of_items);
-            axios.post('/cart/destroy', {
-                    item_id,
-                    user_id,
-                    number_of_items
-                })
-                .then(res => {
-                    items_in_cart.innerText = res.data.total;
-                }).catch(err => {
-                    console.log(err)
-                })
-        }
-
+    function addToCart(item_id, user_id, number_of_items) {
+        number_of_items = event.target.previousElementSibling.value;
+        event.preventDefault();
+        count_items = document.getElementById(item_id);
+        count_items.innerText = Number(count_items.innerText) + Number(number_of_items);
+        axios.post('/cart/add', {
+                item_id,
+                user_id,
+                number_of_items
+            })
+            .then(res => {
+                items_in_cart.innerText = res.data.total;
+            }).catch(err => {
+                console.log(err)
+            })
+        }   
 </script>
