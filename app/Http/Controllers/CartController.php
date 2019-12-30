@@ -29,7 +29,7 @@ class CartController extends Controller
     }
     public function itemsInCart(){
         $total = 0;
-        $totalInCart = Cart::pluck('count');
+        $totalInCart = Cart::where('user_id', auth()->id())->get()->pluck('count');
         foreach($totalInCart as $itemCount){
             $total += $itemCount;
         };
