@@ -17,9 +17,9 @@
                         <div>
                             <p class="count" id="{{$item->id}}">{{$item->count}}</p>
                             <input type="hidden" value="{{$item->count}}" id="item-count-{{$item->id}}">
-                            <p> {{$item->price}} KM</p>
+                            <p id="total_items_{{$item->id}}_price"> {{$item->price}} KM</p>
                         </div>
-                        <p>Total: {{$item->total}} KM</p>
+                        <p id="total_items_{{$item->id}}">Total: {{$item->total}} KM</p>
                     </div>
                 </div>
                 <div class="cart-item-controlls">
@@ -27,8 +27,9 @@
                     @csrf
                     <div class="form-group">
                         <input class="form-control" type="number" name="number_of_items" value="1" min="1" >
-                        <input type="hidden" name="item_id" value="{{$item->id}}" id="{{$item->id}}">
                         <button onClick="addToCart('{{$item->id}}','{{auth()->id()}}')" class="btn btn-primary">Add</button>
+                        <input type="hidden" name="item_id" value="{{$item->id}}" id="{{$item->id}}">
+                        
                         <input type="submit" value="Remove" class="btn btn-danger">
                     </div>
                     </form>
@@ -66,7 +67,13 @@
         number_of_items = event.target.previousElementSibling.value;
         event.preventDefault();
         count_items = document.getElementById(item_id);
+        total_items = document.getElementById('total_items_' + item_id);
+        item_price = document.getElementById('total_items_' + item_id + "_price").innerText.split(" ");
+        console.log(Number(item_price[0]),Number(count_items.innerText));
         count_items.innerText = Number(count_items.innerText) + Number(number_of_items);
+        total_items.innerText = Number(item_price[0]) * Number(count_items.innerText);
+        total_rounded = Number(total_items.innerText).toFixed(2);
+        total_items.innerText = total_rounded + " KM";
         axios.post('/cart/add', {
                 item_id,
                 user_id,
