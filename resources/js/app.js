@@ -19,8 +19,11 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-
+Vue.component('ItemsContainer', require('./components/ItemsContainer.vue').default);
+Vue.component('Item', require('./components/Item.vue').default);
+Vue.component('CartTotal', require('./components/CartTotal.vue').default);
+/*import ItemsContainer from './components/ItemsContainer';
+import Item from './components/Item';*/
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -28,5 +31,9 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  */
 
 const app = new Vue({
-    el: '#app',
+    el: '#app'
+    /*components:{
+        'items-container': ItemsContainer,
+        'Item': Item
+    }*/
 });
