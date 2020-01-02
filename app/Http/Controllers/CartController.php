@@ -18,14 +18,8 @@ class CartController extends Controller
      */
     public function index()
     {
-        $cartItems = Cart::where('user_id', auth()->id())->join('items', 'items.id', '=', 'item_id')->get();
-        $totalPrice = Cart::select('total')->where('user_id', auth()->id())->get();
-        $cartPrice = 0;
-        foreach ($totalPrice as $price) {
-            $cartPrice += $price->total;
-        }
-        
-        return view('cart.index', ['cartItems' => $cartItems, 'cartPrice' => $cartPrice]);
+        $cartItems = Cart::where('user_id', auth()->id())->join('items', 'items.id', '=', 'item_id')->get(); 
+        return view('cart.index', ['cartItems' => $cartItems]);
     }
     public function itemsInCart(){
         $total = 0;
@@ -38,9 +32,11 @@ class CartController extends Controller
 
     public function addToCart(User $user, Items $item, Request $request)
     {
-        $user = $user::find($request->user_id);
+        $user = $user::find(auth()->id());
         $item = $item::find($request->item_id);
         $number_of_items = $request->number_of_items;
+
+   
         $itemInCart = Cart::where([
             ['user_id', $user->id],
             ['item_id', $item->id]
@@ -147,7 +143,10 @@ class CartController extends Controller
             }else{
                 $itemInCart->save();
             } 
-            return redirect()->route('cart');
+            return response()->json(
+                ['item' => $itemInCart->count,
+                'total' => $itemInCart->total]
+            );
         }
         /*$cartItem = new Cart;
         $cartItem['user_id'] = $user->id;
