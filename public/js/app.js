@@ -1921,6 +1921,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var item;
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "item",
@@ -1941,6 +1958,9 @@ var item;
     description: String,
     initialCount: Number,
     price: Number,
+    stock: Number,
+    image: String,
+    cart: Boolean,
     initialTotal: Number
   },
   methods: {
@@ -2013,6 +2033,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2044,14 +2072,20 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   props: {
-    items: Array
+    items: Array,
+    cart: Boolean
   },
   created: function created() {
     this.itemsChanged = this.items;
+
+    if (this.cart) {
+      this.columns = "col-8";
+    }
   },
   data: function data() {
     return {
-      itemsChanged: []
+      itemsChanged: [],
+      columns: "row"
     };
   }
 });
@@ -37467,7 +37501,9 @@ var render = function() {
       0
     ),
     _vm._v(" "),
-    _vm.total ? _c("div", [_vm._v(_vm._s(_vm.total) + " KM")]) : _vm._e()
+    _vm.total
+      ? _c("div", [_vm._v(_vm._s(_vm.total.toFixed(2)) + " KM")])
+      : _vm._e()
   ])
 }
 var staticRenderFns = []
@@ -37492,65 +37528,115 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "cart-item" }, [
-    _c("div", { staticClass: "cart-item-description" }, [
-      _c("h3", [_vm._v(_vm._s(_vm.name))]),
-      _vm._v(" "),
-      _c("p", [_vm._v(_vm._s(_vm.description))])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "cart-item-price" }, [
-      _c("h4", [_vm._v("Price:")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "cart-item-price-container" }, [
-        _c("div", [
-          _c("p", { staticClass: "count" }, [_vm._v(_vm._s(_vm.count))]),
+  return _vm.cart
+    ? _c("div", { staticClass: "cart-item" }, [
+        _c("div", { staticClass: "cart-item-description" }, [
+          _c("h3", [_vm._v(_vm._s(_vm.name))]),
           _vm._v(" "),
-          _c("p", [_vm._v(" " + _vm._s(_vm.price) + " KM")])
+          _c("p", [_vm._v(_vm._s(_vm.description))])
         ]),
         _vm._v(" "),
-        _c("p", [_vm._v("Total: " + _vm._s(_vm.total) + " KM")])
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "cart-item-controlls" }, [
-      _c("div", { staticClass: "form-group" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.value,
-              expression: "value"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: { type: "number", name: "number_of_items", min: "1" },
-          domProps: { value: _vm.value },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+        _c("div", { staticClass: "cart-item-price" }, [
+          _c("h4", [_vm._v("Price:")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "cart-item-price-container" }, [
+            _c("div", [
+              _vm.cart
+                ? _c("p", { staticClass: "count" }, [_vm._v(_vm._s(_vm.count))])
+                : _vm._e(),
+              _vm._v(" "),
+              _c("p", [_vm._v(" " + _vm._s(_vm.price) + " KM")])
+            ]),
+            _vm._v(" "),
+            _c("p", [_vm._v("Total: " + _vm._s(_vm.total.toFixed(2)) + " KM")])
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "cart-item-controlls" }, [
+          _c("div", { staticClass: "form-group" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.value,
+                  expression: "value"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { type: "number", name: "number_of_items", min: "1" },
+              domProps: { value: _vm.value },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.value = $event.target.value
+                }
               }
-              _vm.value = $event.target.value
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "btn btn-primary",
-          attrs: { type: "submit", value: "Add" },
-          on: { click: _vm.addToCart }
-        }),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "btn btn-danger",
-          attrs: { type: "submit", value: "Remove" },
-          on: { click: _vm.deleteFromCart }
-        })
+            }),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "btn btn-primary",
+              attrs: { type: "submit", value: "Add" },
+              on: { click: _vm.addToCart }
+            }),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "btn btn-danger",
+              attrs: { type: "submit", value: "Remove" },
+              on: { click: _vm.deleteFromCart }
+            })
+          ])
+        ])
       ])
-    ])
-  ])
+    : _c("div", { staticClass: "card col-4 mt-2" }, [
+        _c("img", {
+          staticClass: "card-img-top card-height pt-2",
+          attrs: { src: _vm.image, alt: "Item image" }
+        }),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body" }, [
+          _c("h3", { staticClass: "card-title" }, [_vm._v(_vm._s(_vm.name))]),
+          _vm._v(" "),
+          _c("p", { staticClass: "card-text" }, [
+            _vm._v(_vm._s(_vm.description))
+          ]),
+          _vm._v(" "),
+          _c("ul", { staticClass: "list-group list-group-flush" }, [
+            _c("li", { staticClass: "list-group-item" }, [
+              _vm._v("Price: " + _vm._s(_vm.price) + " KM")
+            ]),
+            _vm._v(" "),
+            _c("li", { staticClass: "list-group-item" }, [
+              _vm._v("Stock: " + _vm._s(_vm.stock))
+            ]),
+            _vm._v(" "),
+            _c("form", { staticClass: "form-inline mt-2" }, [
+              _c("div", [
+                _c("input", {
+                  staticClass: "form-control form-control-custom",
+                  attrs: {
+                    type: "number",
+                    name: "number_of_items",
+                    min: "1",
+                    value: "1"
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    on: { click: _vm.addToCart }
+                  },
+                  [_c("i", { staticClass: "fa fa-cart-plus" })]
+                )
+              ])
+            ])
+          ])
+        ])
+      ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -37574,9 +37660,10 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
+  return _c("div", { staticClass: "row" }, [
+    _c(
+      "div",
+      { class: _vm.columns },
       _vm._l(_vm.items, function(item) {
         return _c("Item", {
           key: item.id,
@@ -37586,16 +37673,30 @@ var render = function() {
             description: item.description,
             initialCount: item.count,
             price: item.price,
-            initialTotal: item.total
+            initialTotal: item.total,
+            image: item.image,
+            stock: item.stock,
+            cart: _vm.cart
           },
           on: { "count-changed": _vm.emitCatched }
         })
       }),
-      _vm._v(" "),
-      _c("cart-total", { attrs: { items: _vm.itemsChanged } })
-    ],
-    2
-  )
+      1
+    ),
+    _vm._v(" "),
+    _vm.cart
+      ? _c(
+          "div",
+          { staticClass: "col-4" },
+          [
+            _vm.cart
+              ? _c("cart-total", { attrs: { items: _vm.itemsChanged } })
+              : _vm._e()
+          ],
+          1
+        )
+      : _vm._e()
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
