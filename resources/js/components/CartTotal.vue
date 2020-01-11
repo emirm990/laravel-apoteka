@@ -8,7 +8,7 @@
                 <span>Total: {{item.total}} KM</span>
             </li>
         </ul>
-        <div v-if="total">{{total}} KM</div>
+        <div v-if="total">{{total.toFixed(2)}} KM</div>
     </div>
 </template>
 <script>
