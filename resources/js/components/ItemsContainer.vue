@@ -1,6 +1,7 @@
 <template>
-<div > 
-  <Item v-for="item in items" 
+<div class="row">
+    <div :class="columns">
+        <Item v-for="item in items" 
         :key="item.id" 
         :item_id="item.id" 
         :name="item.name" 
@@ -8,9 +9,16 @@
         :initialCount="item.count" 
         :price="item.price" 
         :initialTotal="item.total"
+        :image="item.image"
+        :stock="item.stock"
+        :cart="cart"
         @count-changed="emitCatched"
     />
-    <cart-total :items="itemsChanged"/> 
+    </div>
+    <div v-if="cart" class="col-4">
+        <cart-total v-if="cart" :items="itemsChanged"/>
+    </div>
+     
 </div>
 </template>
 <script>
@@ -43,14 +51,19 @@ export default {
         }
     },
     props:{
-        items: Array
+        items: Array,
+        cart: Boolean
     },
     created(){
         this.itemsChanged = this.items;
+        if(this.cart){
+            this.columns = "col-8";
+        }
     },
     data(){
         return{
-            itemsChanged: []
+            itemsChanged: [],
+            columns: "row"
         }
         
     }
